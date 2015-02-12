@@ -266,7 +266,7 @@ static int get_basic_auth(request_rec *r, const char **user,
         return HTTP_UNAUTHORIZED;
     }
 
-    if (strcasecmp(ap_getword(r->pool, &auth_line, ' '), "Fake")) {
+    if (strcasecmp(ap_getword(r->pool, &auth_line, ' '), "Basic")) {
         /* Client tried to authenticate using wrong auth scheme */
         ap_log_rerror(APLOG_MARK, APLOG_ERR, 0, r, APLOGNO(01614)
                       "client used wrong authentication scheme: %s", r->uri);
@@ -481,7 +481,7 @@ static int authenticate_basic_fake(request_rec *r)
         return DECLINED;
     }
 
-    auth_line = apr_pstrcat(r->pool, "Fake ",
+    auth_line = apr_pstrcat(r->pool, "Basic ",
                             ap_pbase64encode(r->pool,
                                              apr_pstrcat(r->pool, user,
                                                          ":", pass, NULL)),
