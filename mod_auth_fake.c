@@ -261,8 +261,8 @@ static int get_basic_auth(request_rec *r, const char **user,
 
     /* Get the appropriate header */
 //    auth_line = apr_table_get(r->headers_in, (PROXYREQ_PROXY == r->proxyreq)
-                                              ? "Proxy-Authorization"
-                                              : "Authorization");
+//                                              ? "Proxy-Authorization"
+//                                              : "Authorization");
 
 //    if (!auth_line) {
 //        note_basic_auth_failure(r);
