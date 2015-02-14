@@ -1,6 +1,6 @@
-/* Licensed to the Apache Software Foundation (ASF) under one or more
- * contributor license agreements.  See the NOTICE file distributed with
- * this work for additional information regarding copyright ownership.
+/* Copyright 2015 Marc Jones <mjones@softwarefreedom.org>
+ * Licensed under the Apache License, Version 2.0
+ * Based on the Apache Foundation's mod_auth_basic.c 
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 
 #include "apr_strings.h"
 #include "apr_lib.h"            /* for apr_isspace */
