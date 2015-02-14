@@ -152,12 +152,12 @@ static int authenticate_fake_user(request_rec *r)
 	r->user = ap_expr_str_exec(r, conf->user, &err);
 	if (err) {
         	ap_log_rerror(APLOG_MARK, APLOG_ERR, 0, r, APLOGNO(02455)
-                      "AuthBasicFake: could not evaluate user expression for URI '%s': %s", r->uri, err);
+                      "AuthFake: could not evaluate user expression for URI '%s': %s", r->uri, err);
         	return HTTP_INTERNAL_SERVER_ERROR;
     	}
 
     } else {
-        r->user = (char *) "fake";
+        r->user = (char *) "Fake";
     }
     return OK;
 }
