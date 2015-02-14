@@ -63,9 +63,6 @@ static const char *add_fake_user(cmd_parms * cmd, void *config, const char *user
 
     }
     else {
-
-//        conf->user = user;
-//        conf->user = "Marc";
 	conf->user = 
                 ap_expr_parse_cmd(cmd, user, AP_EXPR_FLAG_STRING_RESULT,
                         &err, NULL);
@@ -86,7 +83,7 @@ static const command_rec auth_fake_cmds[] = {
 	AP_INIT_TAKE1("AuthFakeUser", add_fake_user, NULL, OR_AUTHCFG, 
 		"Specify the username to set REMOTE_USER"),
         AP_INIT_FLAG("AuthFakeAuthoritative", set_authoritative, NULL, OR_AUTHCFG,
-		"Set to 'Off' to allow access control to be passed along to "),
+		"Set to 'Off' to allow access control to be passed along"),
 	{ NULL }
 };
 
