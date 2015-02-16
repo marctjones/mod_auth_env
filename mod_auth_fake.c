@@ -37,7 +37,7 @@
 typedef struct {
     char *dir; /* unused variable */
     int authoritative;
-    ap_expr_info_t *user;
+    char *user;
     int user_set:1;
     int authoritative_set:1;
 } auth_fake_config_rec;
@@ -60,18 +60,11 @@ static const char *add_fake_user(cmd_parms * cmd, void *config, const char *user
     if (!strcasecmp(user, "off")) {
 
         conf->user = NULL;
-        conf->user_set = 1;
+        conf->user_set = 0;
 
     }
     else {
-	conf->user = 
-                ap_expr_parse_cmd(cmd, user, AP_EXPR_FLAG_STRING_RESULT,
-                        &err, NULL);
-        if (err) {
-            return apr_psprintf(cmd->pool,
-                    "Could not parse fake username expression '%s': %s", user,
-                    err);
-        }
+	conf->user = user;
         conf->user_set = 1;
 
     }
@@ -137,7 +130,9 @@ static int authenticate_fake_user(request_rec *r)
 {
     auth_fake_config_rec *conf = ap_get_module_config(r->per_dir_config,
                                                        &auth_fake_module);
-    const char  *current_auth, *err;
+    const char *current_auth, *err;
+    const char *result;
+    const char *user = (const char *) conf->user;
 
     /* Are we configured to be Fake auth? */
     current_auth = ap_auth_type(r);
@@ -145,25 +140,60 @@ static int authenticate_fake_user(request_rec *r)
         return DECLINED;
     }
 
-    r->ap_auth_type = (char*)current_auth;
-    if (conf->user_set) {
-	r->user = ap_expr_str_exec(r, conf->user, &err);
-	if (err) {
-        	ap_log_rerror(APLOG_MARK, APLOG_ERR, 0, r, APLOGNO(02455)
-                      "AuthFake: could not evaluate user expression for URI '%s': %s", r->uri, err);
-        	return HTTP_INTERNAL_SERVER_ERROR;
-    	}
+    if (user) {
+        result = apr_table_get(r->notes, user);
 
+        if (!result) {
+            result = apr_table_get(r->subprocess_env, user);
+        }
+	if (!result) {
+	    result = user;
+        }
+
+	r->user = (char *) result;
     } else {
         r->user = (char *) "Fake";
     }
     return OK;
 }
 
+static int fixup_fake_user(request_rec *r)
+{
+    auth_fake_config_rec *conf = ap_get_module_config(r->per_dir_config,
+                                                       &auth_fake_module);
+    const char *user = (const char *) conf->user;
+    const char  *current_auth, *result, *err;
+
+    /* Are we configured to be Fake auth? */
+    current_auth = ap_auth_type(r);
+    if (!current_auth || strcasecmp(current_auth, "Fake")) {
+        return DECLINED;
+    }
+
+/*
+    if (user) {
+        result = apr_table_get(r->notes, user);
+
+        if (!result) {
+            result = apr_table_get(r->subprocess_env, user);
+        }
+	if (!result) {
+	    result = user;
+        }
+
+	r->user = (char *) result;
+    }
+*/
+    return OK;
+}
+
 static void register_hooks(apr_pool_t *p)
 {
-    ap_hook_check_authn(authenticate_fake_user, NULL, NULL, APR_HOOK_MIDDLE,
+    static const char * const aszPre[]={ "mod_gnutls.c", NULL };
+
+    ap_hook_check_authn(authenticate_fake_user, aszPre, NULL, APR_HOOK_MIDDLE,
                         AP_AUTH_INTERNAL_PER_CONF);
+    ap_hook_fixups(fixup_fake_user, aszPre, NULL, APR_HOOK_LAST);
 }
 
 AP_DECLARE_MODULE(auth_fake) =
