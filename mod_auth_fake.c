@@ -52,7 +52,7 @@ static const char *set_authoritative(cmd_parms * cmd, void *config, int flag)
     return NULL;
 }
 
-static const char *add_fake_user(cmd_parms * cmd, void *config, const char *user)
+static const char *add_env_user(cmd_parms * cmd, void *config, const char *user)
 {
     auth_env_config_rec *conf = (auth_env_config_rec *) config;
     const char *err;
