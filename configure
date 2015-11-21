@@ -1,0 +1,4 @@
+#!/bin/sh
+touch .deps
+cp Makefile.in Makefile
+cp modules.mk.in modules.mk

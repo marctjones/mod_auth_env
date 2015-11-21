@@ -1,0 +1,6 @@
+*~
+.libs
+mod_auth_env.la
+mod_auth_env.lo
+mod_auth_env.o
+mod_auth_env.slo
