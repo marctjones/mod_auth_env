@@ -13,3 +13,10 @@ override_dh_auto_build:
 		$(CPPFLAGS)" -c -o mod_auth_env.so mod_auth_env.c
 
 override_dh_auto_test:
+
+new-upstream:
+	version=1.0.1; \
+	tgz=../mod-auth-env_$$version.orig.tar.gz; \
+	vcstag=v$$version; \
+	wget -O $$tgz https://github.com/matujo/mod_auth_env/archive/$$vcstag.tar.gz; \
+	git fetch https://github.com/matujo/mod_auth_env.git
