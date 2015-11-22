@@ -1,0 +1,5 @@
+mod-auth-env (1.0.0-1) UNRELEASED; urgency=low
+
+  * Initial release. Closes: #nnnn
+
+ -- James Valleroy <jvalleroy@mailbox.org>  Sat, 21 Nov 2015 07:55:50 -0500

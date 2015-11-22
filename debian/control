@@ -1,0 +1,18 @@
+Source: mod-auth-env
+Section: web
+Priority: extra
+Maintainer: James Valleroy <jvalleroy@mailbox.org>
+Build-Depends: debhelper (>=9), dh-apache2, apache2-dev
+Standards-Version: 3.9.6
+Homepage: https://github.com/matujo/mod_auth_env
+
+Package: libapache2-mod-auth-env
+Architecture: any
+Depends: ${misc:Depends}, ${shlibs:Depends}, apache2-api-20120211
+Description: Apache module that sets REMOTE_USER from environment
+ mod_auth_env provides the ability to transparently specify the name of
+ an authenticated remote user based on internal environment variables
+ available at the time of the Apache authentication verification step
+ or a literal string. It specifically ensures that GnuTLS is loaded
+ first, so that Variables from GnuTLS client certificate verification
+ can be used to specific the Apache authenticated user.

@@ -1,0 +1,15 @@
+#!/usr/bin/make -f
+
+%:
+	dh $@ --with-apache2
+
+override_dh_auth_clean:
+	rm -rf .libs *.la *.lo
+
+override_dh_auto_build:
+	LTFLAGS="--no-silent" apxs2 \
+		-S CFLAGS="$(CFLAGS) \
+		-D_LARGEFILE64_SOURCE \
+		$(CPPFLAGS)" -c -o mod_auth_env.so mod_auth_env.c
+
+override_dh_auto_test:
